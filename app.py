@@ -31,7 +31,8 @@ def predict():
     pred_out, activations = model.forward(rgb_in)
     pred_rgb = pred_out[0]
     
-    variations = get_color_variations(pred_rgb)
+    # All variations calculated using explicit Neural Network inferences
+    variations = get_color_variations(model, rgb_in)
     predicted_hex = rgb_array_to_hex(pred_rgb)
     
     return jsonify({
@@ -63,7 +64,7 @@ def extract_palette():
             base_hex = rgb_array_to_hex(color_rgb)
             pred_out, activations = model.forward(color_rgb)
             pred_rgb = pred_out[0]
-            variations = get_color_variations(pred_rgb)
+            variations = get_color_variations(model, color_rgb)
             
             results.append({
                 "base_hex": base_hex,
@@ -75,6 +76,7 @@ def extract_palette():
             })
             
         return jsonify({"palettes": results})
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

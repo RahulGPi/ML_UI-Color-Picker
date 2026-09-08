@@ -154,19 +154,30 @@ def rgb_array_to_hex(rgb_arr) -> str:
     r, g, b = [int(np.clip(x, 0.0, 1.0) * 255) for x in rgb_arr]
     return f"#{r:02x}{g:02x}{b:02x}"
 
-def get_color_variations(base_rgb: np.ndarray):
+def get_color_variations(model: ColorPredictorNumPy, base_rgb: np.ndarray):
     """
-    Given base RGB array [r, g, b], compute Primary match, Tint, and Shade.
+    Computes all accent color variations (Primary Match, Tint, Shade) using 
+    explicit NumPy Neural Network forward passes for each input tensor condition.
     """
-    base = np.clip(base_rgb, 0.0, 1.0)
-    lighter = np.clip(base + (1.0 - base) * 0.35, 0.0, 1.0)
-    darker = np.clip(base * 0.65, 0.0, 1.0)
+    base_input = np.clip(base_rgb, 0.0, 1.0)
+    lighter_input = np.clip(base_input + (1.0 - base_input) * 0.35, 0.0, 1.0)
+    darker_input = np.clip(base_input * 0.65, 0.0, 1.0)
+    
+    # Neural Network Forward Pass Inferences
+    primary_pred, _ = model.forward(base_input)
+    tint_pred, _ = model.forward(lighter_input)
+    shade_pred, _ = model.forward(darker_input)
+    
+    p_rgb = primary_pred[0]
+    t_rgb = tint_pred[0]
+    s_rgb = shade_pred[0]
     
     return [
-        {"label": "Primary match", "hex": rgb_array_to_hex(base), "rgb": base.tolist()},
-        {"label": "Tint", "hex": rgb_array_to_hex(lighter), "rgb": lighter.tolist()},
-        {"label": "Shade", "hex": rgb_array_to_hex(darker), "rgb": darker.tolist()}
+        {"label": "Primary match", "hex": rgb_array_to_hex(p_rgb), "rgb": p_rgb.tolist()},
+        {"label": "Tint", "hex": rgb_array_to_hex(t_rgb), "rgb": t_rgb.tolist()},
+        {"label": "Shade", "hex": rgb_array_to_hex(s_rgb), "rgb": s_rgb.tolist()}
     ]
+
 
 def extract_dominant_colors_numpy(pil_img: Image.Image, num_colors=3, max_iter=20):
     """
