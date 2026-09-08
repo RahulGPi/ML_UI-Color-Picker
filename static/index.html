@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accent Color Studio | AI NumPy Color Generator</title>
+    <meta name="description" content="AI Accent Color Studio powered by pure NumPy neural networks and K-Means clustering. Generate complement color palettes, test UI previews, and analyze image color schemes.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Dynamic Ambient Background Glow -->
+    <div class="ambient-glow bg-glow-primary" id="bgGlowPrimary"></div>
+    <div class="ambient-glow bg-glow-accent" id="bgGlowAccent"></div>
+
+    <div class="app-container">
+        <!-- Navigation Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Accent Color Studio<span class="dot">.</span></h1>
+                    <span class="badge-numpy"><i class="fa-solid fa-microchip"></i> NumPy Powered Engine</span>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <nav class="nav-tabs" id="mainNav">
+                <button class="nav-btn active" data-tab="studioTab">
+                    <i class="fa-solid fa-palette"></i> Studio & AI Net
+                </button>
+                <button class="nav-btn" data-tab="playgroundTab">
+                    <i class="fa-solid fa-desktop"></i> UI Playground
+                </button>
+                <button class="nav-btn" data-tab="imageTab">
+                    <i class="fa-solid fa-image"></i> Image Analyzer
+                </button>
+                <button class="nav-btn" data-tab="metricsTab">
+                    <i class="fa-solid fa-chart-line"></i> Model Metrics
+                </button>
+            </nav>
+
+            <button class="export-btn" id="openExportBtn">
+                <i class="fa-solid fa-code"></i> Export Tokens
+            </button>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="content-body">
+            
+            <!-- TAB 1: STUDIO & AI NEURAL NETWORK -->
+            <section class="tab-pane active" id="studioTab">
+                <div class="studio-grid">
+                    <!-- Left: Control Panel -->
+                    <div class="glass-card control-panel">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-sliders"></i> Base Color Selection</h2>
+                            <p class="subtitle">Pick a background color to compute complementary accent colors via NumPy Neural Net.</p>
+                        </div>
+
+                        <!-- Color Picker Box -->
+                        <div class="picker-wrapper">
+                            <div class="color-preview-box" id="baseColorPreviewBox">
+                                <input type="color" id="colorPickerInput" value="#141414">
+                                <div class="picker-overlay-icon"><i class="fa-solid fa-eye-dropper"></i></div>
+                            </div>
+                            <div class="color-inputs">
+                                <label for="hexTextInput">Hex Code</label>
+                                <div class="hex-input-group">
+                                    <span class="hash">#</span>
+                                    <input type="text" id="hexTextInput" value="141414" maxlength="6" spellcheck="false">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preset Palette Quick Select -->
+                        <div class="presets-section">
+                            <span class="section-label">Quick Presets</span>
+                            <div class="preset-chips">
+                                <button class="preset-btn" data-color="#0f172a" style="--chip-bg: #0f172a;">Slate Dark</button>
+                                <button class="preset-btn" data-color="#18181b" style="--chip-bg: #18181b;">Zinc Void</button>
+                                <button class="preset-btn" data-color="#092635" style="--chip-bg: #092635;">Deep Ocean</button>
+                                <button class="preset-btn" data-color="#2d0036" style="--chip-bg: #2d0036;">Cyber Violet</button>
+                                <button class="preset-btn" data-color="#1e1e24" style="--chip-bg: #1e1e24;">Midnight</button>
+                                <button class="preset-btn" data-color="#f8fafc" style="--chip-bg: #f8fafc; color: #000;">Clean Light</button>
+                            </div>
+                        </div>
+
+                        <!-- Generated Variations -->
+                        <div class="variations-section">
+                            <span class="section-label">Predicted Accent Variations</span>
+                            <div class="variations-grid" id="variationsGrid">
+                                <!-- Dynamic swatches generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Live Neural Network Visualization -->
+                    <div class="glass-card network-panel">
+                        <div class="card-header">
+                            <div class="header-with-badge">
+                                <h2><i class="fa-solid fa-brain"></i> Neural Network Firing Graph</h2>
+                                <span class="pulse-indicator"><span class="dot"></span> Live Activations</span>
+                            </div>
+                            <p class="subtitle">Architecture: 3 RGB Inputs $\rightarrow$ 16 ReLU $\rightarrow$ 16 ReLU $\rightarrow$ 3 Sigmoid Outputs.</p>
+                        </div>
+
+                        <!-- Interactive Canvas -->
+                        <div class="canvas-container">
+                            <canvas id="networkCanvas"></canvas>
+                            <div class="canvas-tooltip" id="canvasTooltip"></div>
+                        </div>
+
+                        <div class="network-legend">
+                            <div class="legend-item"><span class="legend-dot dot-in"></span> Input RGB</div>
+                            <div class="legend-item"><span class="legend-dot dot-h1"></span> Hidden Layer 1 (ReLU)</div>
+                            <div class="legend-item"><span class="legend-dot dot-h2"></span> Hidden Layer 2 (ReLU)</div>
+                            <div class="legend-item"><span class="legend-dot dot-out"></span> Predicted Accent Output</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: LIVE UI PLAYGROUND -->
+            <section class="tab-pane" id="playgroundTab">
+                <div class="playground-header glass-card">
+                    <h2><i class="fa-solid fa-laptop-code"></i> Live Interface Component Playground</h2>
+                    <p class="subtitle">Experience how the base color and AI predicted accent colors look applied to realistic UI components.</p>
+                </div>
+
+                <div class="playground-grid">
+                    <!-- Hero Component -->
+                    <div class="glass-card ui-preview-card hero-preview" id="previewHero">
+                        <div class="preview-tag">Hero Banner</div>
+                        <div class="hero-content">
+                            <span class="accent-badge" id="previewBadge"><i class="fa-solid fa-bolt"></i> AI Generated Accent</span>
+                            <h3 class="hero-title">Elevate Your Design System</h3>
+                            <p class="hero-desc">Harmonized neural network predictions eliminate guesswork in UI accent selection.</p>
+                            <div class="hero-actions">
+                                <button class="ui-btn primary-btn" id="previewBtnPrimary">Get Started <i class="fa-solid fa-arrow-right"></i></button>
+                                <button class="ui-btn secondary-btn" id="previewBtnSecondary">Documentation</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Widget Component -->
+                    <div class="glass-card ui-preview-card widget-preview" id="previewWidget">
+                        <div class="preview-tag">Dashboard Widget</div>
+                        <div class="widget-header">
+                            <span class="widget-title">Monthly Convergence</span>
+                            <span class="widget-trend" id="previewTrend">+24.5% <i class="fa-solid fa-arrow-trend-up"></i></span>
+                        </div>
+                        <div class="widget-metric">
+                            <span class="metric-value">98.42%</span>
+                            <span class="metric-label">Model Accuracy</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="previewProgress" style="width: 82%;"></div>
+                        </div>
+                        <div class="widget-footer">
+                            <div class="avatar-group">
+                                <div class="avatar" style="background-color: #3b82f6;">AI</div>
+                                <div class="avatar" style="background-color: #8b5cf6;">NP</div>
+                                <div class="avatar" style="background-color: #ec4899;">UI</div>
+                            </div>
+                            <button class="icon-action-btn" id="previewIconBtn"><i class="fa-solid fa-share-nodes"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Bar Component -->
+                    <div class="glass-card ui-preview-card nav-preview" id="previewNavCard">
+                        <div class="preview-tag">Interactive Navigation & Controls</div>
+                        <div class="simulated-nav" id="previewSimNav">
+                            <span class="nav-brand"><i class="fa-solid fa-cube"></i> Studio</span>
+                            <div class="simulated-links">
+                                <a href="#" class="sim-link active" id="simLinkActive">Dashboard</a>
+                                <a href="#" class="sim-link">Analytics</a>
+                                <a href="#" class="sim-link">Settings</a>
+                            </div>
+                        </div>
+                        <div class="controls-row">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked id="previewToggleInput">
+                                <span class="slider round" id="previewToggleSlider"></span>
+                            </label>
+                            <span class="toggle-label">Active State Indicator</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: IMAGE ANALYZER -->
+            <section class="tab-pane" id="imageTab">
+                <div class="glass-card image-panel">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-cloud-arrow-up"></i> Image Dominant Palette Analyzer</h2>
+                        <p class="subtitle">Upload any image to extract dominant colors using NumPy K-Means clustering and predict complementary accents for each.</p>
+                    </div>
+
+                    <!-- Drag and Drop Dropzone -->
+                    <div class="dropzone" id="imageDropzone">
+                        <input type="file" id="imageFileInput" accept="image/png, image/jpeg, image/webp" hidden>
+                        <div class="dropzone-content">
+                            <div class="drop-icon"><i class="fa-solid fa-file-image"></i></div>
+                            <h3>Drag & drop an image here, or <span>browse</span></h3>
+                            <p>Supports PNG, JPG, WEBP</p>
+                        </div>
+                    </div>
+
+                    <!-- Uploaded Image & Extracted Results Container -->
+                    <div class="image-results-container hidden" id="imageResultsContainer">
+                        <div class="image-display-side">
+                            <img id="uploadedImagePreview" src="" alt="Uploaded preview">
+                        </div>
+                        <div class="palettes-side">
+                            <h3>Extracted NumPy K-Means Palettes</h3>
+                            <div class="palettes-list" id="palettesList">
+                                <!-- Dynamic Palette Cards -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: MODEL METRICS & LOSS CURVE -->
+            <section class="tab-pane" id="metricsTab">
+                <div class="metrics-grid">
+                    <!-- Top Stat Cards -->
+                    <div class="glass-card stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Final Loss (MSE)</span>
+                            <span class="stat-value" id="valLossMSE">--</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-ruler-combined"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Mean Absolute Error (MAE)</span>
+                            <span class="stat-value" id="valMAE">--</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-stopwatch"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Training Duration</span>
+                            <span class="stat-value" id="valDuration">--</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Training Epochs</span>
+                            <span class="stat-value" id="valEpochs">400</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loss Curve Visualization -->
+                <div class="glass-card loss-card">
+                    <div class="card-header header-with-action">
+                        <div>
+                            <h2><i class="fa-solid fa-chart-area"></i> Mean Squared Error Loss Curve (400 Epochs)</h2>
+                            <p class="subtitle">Monitors convergence of the pure NumPy model across training iterations.</p>
+                        </div>
+                        <button class="retrain-btn" id="retrainBtn">
+                            <i class="fa-solid fa-rotate-right"></i> Re-Calibrate Model
+                        </button>
+                    </div>
+
+                    <div class="loss-canvas-container">
+                        <canvas id="lossCanvas"></canvas>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Export Tokens Modal -->
+    <div class="modal-overlay hidden" id="exportModal">
+        <div class="modal-card glass-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-code"></i> Export Palette Tokens</h3>
+                <button class="close-modal-btn" id="closeExportBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" data-format="css">CSS Variables</button>
+                <button class="modal-tab-btn" data-format="tailwind">Tailwind Config</button>
+                <button class="modal-tab-btn" data-format="json">JSON</button>
+            </div>
+            <div class="code-box-wrapper">
+                <pre><code id="exportCodeBlock"></code></pre>
+                <button class="copy-code-btn" id="copyExportCodeBtn"><i class="fa-solid fa-copy"></i> Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast hidden" id="toastNotification">
+        <i class="fa-solid fa-circle-check"></i> <span id="toastMessage">Hex copied to clipboard!</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

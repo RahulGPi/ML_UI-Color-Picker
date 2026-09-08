@@ -1,61 +1,34 @@
-# AI Accent Color Generator and Dashboard
+# Accent Color Studio | NumPy Powered Engine
 
-A responsive web application utilizing a PyTorch neural network to predict complementary accent colors for a given background color. Built with Streamlit, this application features dynamic model training, real-time inference, and a performance metrics dashboard.
+An interactive, high-performance web application utilizing a pure **NumPy** neural network ($3 \rightarrow 16 \rightarrow 16 \rightarrow 3$) to predict complementary accent colors for any given background color or extracted image palette.
 
-## Features
+Built with a custom dark-glassmorphism web UI, Flask REST server, real-time Canvas neural firing graph, and live UI component playground.
 
-* **Live Color Prediction:** Select a background color using the interactive color picker to instantly view the neural network's predicted accent color applied to a user interface component.
-* **Dynamic Training:** The PyTorch model trains dynamically upon the initial launch, utilizing Streamlit's caching mechanisms for efficient subsequent interactions.
-* **Metrics Dashboard:** Monitor real-time training metrics, including Final Loss (MSE), Mean Absolute Error (MAE), and total training duration.
-* **Loss Curve Visualization:** A native line chart tracks the Mean Squared Error (MSE) across all epochs to visualize model convergence.
+## Key Features
+
+* **Pure NumPy ML Engine:** Feedforward neural network implemented completely in NumPy (no PyTorch/TensorFlow dependencies). Includes He/Xavier initialization, vectorized forward/backward passes, and an Adam optimizer.
+* **Interactive Firing Graph:** Real-time HTML5 Canvas displaying the $3 \rightarrow 16 \rightarrow 16 \rightarrow 3$ neural network firing with live node activation values.
+* **Live UI Component Playground:** Test generated accent colors live on real interactive UI components (Hero banners, progress bars, active switches, and navbars).
+* **NumPy K-Means Image Extractor:** Upload any image to perform vectorized K-Means palette clustering and predict complementary accents for each dominant color.
+* **Loss Curve & Metrics Dashboard:** Monitor training convergence (MSE loss over 400 epochs), MAE, and re-calibrate the model on demand.
+* **Token Exporter:** One-click export to CSS variables (`:root`), Tailwind CSS config, or JSON.
 
 ## Architecture and Methodology
 
-The core of the application relies on a Feedforward Neural Network (`ColorPredictor`):
+The core engine relies on a pure NumPy Feedforward Neural Network (`ColorPredictorNumPy`):
 * **Architecture:** 3 input nodes (RGB) $\rightarrow$ 16-node hidden layer (ReLU) $\rightarrow$ 16-node hidden layer (ReLU) $\rightarrow$ 3 output nodes (Sigmoid).
 * **Training Data:** 2,000 randomly generated RGB tensors.
-* **Objective:** The model is trained to predict the complementary color by learning the relationship $y = 1.0 - x$.
-* **Optimization:** Utilizes the Adam optimizer and Mean Squared Error (MSE) loss function over 400 epochs.
+* **Objective:** Learns complementary color mapping $y = 1.0 - x$.
+* **Optimization:** Custom NumPy Adam optimizer over 400 epochs.
 
-## Technology Stack
+## Installation & Running
 
-* **Python 3**
-* **PyTorch:** Neural network architecture, training loop, and inference.
-* **Streamlit:** Frontend interface, caching, and layout generation.
-* **Pandas:** Data structuring for loss curve visualization.
-
-## Installation and Usage
-
-Execute the following commands in your Linux terminal to configure and run the project locally.
-
-**1. Clone the repository**
 ```bash
-git clone https://github.com/yourusername/ai-color-matcher.git
-cd ai-color-matcher
+# 1. Install dependencies
+pip install numpy PIL flask
+
+# 2. Run the application
+python app.py
 ```
 
-**2. Create and activate a virtual environment**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-**3. Install dependencies**
-Install the required packages via pip:
-```bash
-pip install torch streamlit pandas
-```
-
-**4. Run the application**
-Execute the script using Streamlit. The application will open in your default web browser at `http://localhost:8501`.
-```bash
-streamlit run app.py
-```
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome. Please review the issues page for current tasks and submit a pull request for proposed changes.
-
-## License
-
-This project is licensed under the MIT License. Please reference the LICENSE file for full details.
+The web application will launch at `http://localhost:5000`.
