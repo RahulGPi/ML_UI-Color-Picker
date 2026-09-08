@@ -147,19 +147,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function getContrastColor(hex) {
+        if (!hex) return '#ffffff';
+        hex = hex.replace('#', '');
+        if (hex.length !== 6) return '#ffffff';
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        return (yiq >= 135) ? '#09090b' : '#f4f4f5';
+    }
+
     function updateThemeVariables(data) {
         const primaryHex = data.variations[0].hex;
         const tintHex = data.variations[1].hex;
         const shadeHex = data.variations[2].hex;
 
+        const textOnBase = getContrastColor(currentBaseHex);
+        const textOnAccent = getContrastColor(primaryHex);
+
         document.documentElement.style.setProperty('--base-color', currentBaseHex);
         document.documentElement.style.setProperty('--accent-primary', primaryHex);
         document.documentElement.style.setProperty('--accent-tint', tintHex);
         document.documentElement.style.setProperty('--accent-shade', shadeHex);
+        document.documentElement.style.setProperty('--text-on-base', textOnBase);
+        document.documentElement.style.setProperty('--text-on-accent', textOnAccent);
 
         bgGlowPrimary.style.background = currentBaseHex;
         bgGlowAccent.style.background = primaryHex;
     }
+
 
     // ---------------------------------------------------------
     // 3. Neural Network Canvas Visualizer
